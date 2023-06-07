@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import loginPageImage from '../assets/loginPageImage.png'
 export default function LoginPage(){
     return (
@@ -14,7 +15,8 @@ export default function LoginPage(){
                             <input type="text" placeholder='Email/phone Number' className='border-0 border-bottom p-1' style = {{width:'100%',outline:'none'}}/><br/>
                             <input type="text" placeholder='password' className='border-0 border-bottom p-1 mt-3' style = {{width:'100%',outline:'none'}}/><br/>
                             <div className='d-flex align-items-center justify-content-between mt-3'>
-                                <input type="submit" value="LogIn" className='btn btn-danger ps-5 pe-5'/>
+                                {/* <input type="submit" value="LogIn" className='btn btn-danger ps-5 pe-5'/> */}
+                                <Link to={'/HomePage'}>Link</Link>
                                 <a className='text-danger'>Forget Password</a>
                             </div>
                         </div>
