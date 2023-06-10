@@ -1,9 +1,10 @@
+import {Link} from "react-router-dom";
 export default function Navbar(){
     return (
         <div className="container-fluid text-center border-bottom" style={{height:"60px"}}>
             <div className="row h-100">
                 <div className="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">
-                    Exclusive
+                    <Link to = "/">Exclusive</Link>
                 </div>
                 <div className="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">
                     <div className="container">
