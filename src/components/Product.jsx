@@ -20,7 +20,10 @@ export default function Product({imageLink,title,ratings,price}){
             <div className="card-body">
                 <p className="card-text">{title}</p>
                 <p className = "card-text text-danger">Rs {price}</p>
-                <p className="card-text">{showRatings()}</p>
+                {ratings && <p className="card-text">{showRatings()}</p>}
+                <p className="text-center">
+                    <p className="btn btn-outline-secondary" style={{fontSize:"10px",width:'100%'}}>Add To Cart</p>
+                </p>
             </div>
             </div>
         </>
