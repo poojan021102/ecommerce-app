@@ -26,7 +26,7 @@ export default function WishListPage(){
                         a.map((item,index)=>{
                             return(
                                     <div key = {index} className="col d-flex justify-content-center align-items-center mt-2 mb-2">
-                                        <Product imageLink={item.imageLink} title = {item.title} price = {item.price}/>
+                                        <Product imageLink={item.imageLink} title = {item.title} price = {item.price} ratings={3}/>
                                     </div>
                                 )
                             })

@@ -8,7 +8,7 @@ export default function Product({imageLink,title,ratings,price}){
         return(
             a.map((status,index)=>{
                 return(
-                status=="checked"?(<span key = {index} className="fa fa-star" style={{color:"yellow","fontSize":"20px"}} ></span>):(<span key = {index} className="fa-fa-star" style={{"font-size":"20px"}}></span>)
+                status=="checked"?(<span key = {index} className="fa fa-star" style={{color:"yellow","fontSize":"20px"}} ></span>):(<span key = {index} className="fa fa-star" style={{color:"gray","fontSize":"20px"}} ></span>)
                 )
             })
         )
