@@ -63,6 +63,7 @@ li a:hover:not(.active) {
 .mainImgCont{
     width: 500px;
     height: 600px;
+    background: #F5F5F5;
     left: 335px;
     top: 323px;
 }
