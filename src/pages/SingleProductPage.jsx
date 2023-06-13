@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Product from '../components/Product';
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 export default function SingleProductPage(){
+    const {id} = useParams();
     const [quantity,setQuantity]  = useState(2);
     const [stock,setStock] = useState(true);
+    const [proName,setProName] = useState('');
+    const [proDescription,setProDescription] = useState('');
+    const [proPrice,setProPrice] = useState('');
+    const [thumbnail,setThumbnail] = useState('');
+    const [otherPic,setOtherPic] = useState([]);
 
     let a = [{imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
     {imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
@@ -12,12 +20,31 @@ export default function SingleProductPage(){
     {imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
 ]
 
+    useEffect(()=>{
+        axios.get('https://dummyjson.com/products/'+id).then((response)=>{
+            setProName(response.data.title);
+            setProDescription(response.data.description);
+            setProPrice(response.data.price);
+            setThumbnail(response.data.thumbnail);
+            setOtherPic(response.data.images);
+            if(response.data.stock <= 0) setStock(false);
+        });
+    },[id]);
+
+    const changeThumbnail = (index) =>{
+        console.log(otherPic[index]);
+        let tmp=thumbnail;
+        setThumbnail(otherPic[index]);
+        otherPic[otherPic.length-1]=otherPic[index];
+        otherPic[index]=tmp;
+    }
+
     const setTitle = (title)=>{
         return(
-                <div className="d-flex m-3 align-items-center">
-                    <div style = {{width:"20px",height:"50px",backgroundColor:"red",borderRadius:"5px"}}></div>
-                    <p className="ms-3" style={{fontSize:"20px"}}>{title}</p>
-                </div>
+            <div className="d-flex m-3 align-items-center">
+                <div style = {{width:"20px",height:"50px",backgroundColor:"red",borderRadius:"5px"}}></div>
+                <p className="ms-3" style={{fontSize:"20px"}}>{title}</p>
+            </div>
         )
     }
     const showProducts = (a)=>{
@@ -48,7 +75,6 @@ export default function SingleProductPage(){
         }
         return(
             a.map((status,index)=>{
-                console.log(status);
                 return(
                 status=="checked"?(<span key = {index} className="fa fa-star" style={{color:"yellow",fontSize:"20px"}} ></span>):(<span key = {index} className="fa fa-star" style={{color:"gray",fontSize:"20px"}} ></span>)
                 )
@@ -102,45 +128,42 @@ export default function SingleProductPage(){
             <div className='mx-5 px-5 d-flex flex-row'>
                 <div className='d-flex flex-row'>
                     <div className='d-flex flex-column'>
-                        <div className='smallImgCont'>
-                            <img className='smallImg' src="https://m.media-amazon.com/images/I/71se60rnXTL.jpg" alt="" />
-                        </div>
-                        <div className='smallImgCont'>
-                            <img className='smallImg' src="https://m.media-amazon.com/images/I/71se60rnXTL.jpg" alt="" />
-                        </div>
-                        <div className='smallImgCont'>
-                            <img className='smallImg' src="https://m.media-amazon.com/images/I/71se60rnXTL.jpg" alt="" />
-                        </div>
-                        <div className='smallImgCont'>
-                            <img className='smallImg' src="https://m.media-amazon.com/images/I/71se60rnXTL.jpg" alt="" />
-                        </div>
+                        {
+                            otherPic.length > 0 && otherPic.map((idx,index)=>{
+                                if(idx !== thumbnail){
+                                    return (<div onClick={()=>changeThumbnail(index)} className='smallImgCont mb-3' style={{cursor: "pointer"}}>
+                                        <img className='smallImg' src={idx} alt="" />
+                                    </div>)
+                                }
+                            })
+                        }
                     </div>
-                    <div className='mainImgCont'>
-                        <img className='mainImg' src="https://static.fnac-static.com/multimedia/Images/FR/MDM/d6/dd/f6/16178646/1505-1/tsp20230110223611/Joystick-Jet-Alpha-Omega-Players-Noir.jpg" alt="" />
+                    <div className='mainImgCont ms-4'>
+                        <img className='mainImg' src={thumbnail} alt="" />
                     </div>
                 </div>
                 <div className='d-flex flex-column ml-5 pl-5'>
                     <div className='pro-title mb-2'>
-                        Name
+                        {proName}
                     </div>
 
-                    <div className='d-flex flex-row my-1'>
+                    <div className='d-flex flex-row mt-1 mb-2'>
                         <div>{showRatings(3)}</div>
                         <small className='ms-2 text-muted'>(150 Reviews) |</small>
                         <div className='ms-2'>
                             {
-                                stock && (<p className='text-success'>In Stock</p>)
+                                stock && (<b className='text-success'>In Stock</b>)
                             }
                             {
-                                !stock && (<p className='text-danger'>Out of Stock</p>)
+                                !stock && (<b className='text-danger'>Out of Stock</b>)
                             }
                         </div>
                     </div>
                     
                     <div className='pro-price mb-1'>
-                        Rs3000
+                        Rs{proPrice}
                     </div>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Rem perferendis a nihil praesentium ratione! Numquam dolorum iusto quas vitae nihil, illum eligendi delectus ipsum optio.</p>
+                    <p>{proDescription}</p>
                     <hr />
 
                     <div className='d-flex flex-column'>

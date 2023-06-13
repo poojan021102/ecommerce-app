@@ -4,8 +4,14 @@ import Features from "../components/Features"
 import Poster from "../components/Poster"
 import Dropdown from 'react-bootstrap/Dropdown';
 import Carousel from 'react-bootstrap/Carousel';
+import { useEffect } from "react";
+import {checkIfUserAlreadyExists} from "../redux/actions"
+import { useDispatch } from "react-redux";
 export default function HomePage(){
-
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(checkIfUserAlreadyExists());
+    },[]);
     const setTitle = (title,name)=>{
         return(
             <div>

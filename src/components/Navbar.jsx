@@ -1,6 +1,15 @@
 import {Link} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../redux/actions";
 export default function Navbar(){
-    let loggedIn = true;
+    const user = useSelector(state=>state.user);
+    const dispatch = useDispatch();
+    const handleLogout = (e)=>{
+        e.preventDefault();
+        dispatch(logoutUser()); 
+    }
     return (
         <div className="container-fluid text-center border-bottom" style={{height:"60px"}}>
             <div className="row h-100">
@@ -20,7 +29,11 @@ export default function Navbar(){
                                 About
                             </div>
                             <div className="col-md-3 col-sm-3 col-xl-3 col-lg-3 col-xxl-3 col-xs-12">
-                                SignUP
+                                {
+                                    user.username===""?(<Link to = "/logIn">SignUP/LogIn</Link>):(
+                                        <Button className="btn btn-danger" onClick = {handleLogout}>Log Out</Button>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
@@ -34,7 +47,7 @@ export default function Navbar(){
                     </svg>       
                         </div>
                         {
-                            loggedIn && (
+                            user.username !=="" && (
                                 <div className="d-flex justify-content align-items-center">
                                     <Link to = "/WishList">
                                         <div className="p-2">
