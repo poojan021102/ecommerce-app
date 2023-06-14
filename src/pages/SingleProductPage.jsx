@@ -2,15 +2,21 @@ import { useEffect, useState } from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Product from '../components/Product';
 import axios from "axios";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch,useSelector } from 'react-redux';
+import { addProductToCart,addProductToWishlist,removeFromWishlist } from '../redux/actions';
 
 export default function SingleProductPage(){
     const {id} = useParams();
-    const [quantity,setQuantity]  = useState(2);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector(state=>state.user);
+    const [qty,setQuantity]  = useState(1);
     const [stock,setStock] = useState(true);
     const [proName,setProName] = useState('');
     const [proDescription,setProDescription] = useState('');
     const [proPrice,setProPrice] = useState('');
+    const [rating,setRating] = useState('');
     const [thumbnail,setThumbnail] = useState('');
     const [otherPic,setOtherPic] = useState([]);
 
@@ -27,9 +33,38 @@ export default function SingleProductPage(){
             setProPrice(response.data.price);
             setThumbnail(response.data.thumbnail);
             setOtherPic(response.data.images);
+            setRating(response.data.rating);
             if(response.data.stock <= 0) setStock(false);
         });
     },[id]);
+
+    const addtolist = () => {
+        const obj = {
+            id: Number(id),
+            title: proName,
+            price: proPrice,
+            imageLink: thumbnail,
+            rating,
+        }
+        dispatch(addProductToWishlist(obj));
+    }
+
+    const removefromlist = () => {
+        const obj = {id: Number(id)};
+        dispatch(removeFromWishlist(obj));
+    }
+
+    const handleBuyNow = () => {
+        const obj = {
+            id: Number(id),
+            title:proName,
+            price:proPrice,
+            imageLink:thumbnail,
+            qty,
+        }
+        dispatch(addProductToCart(obj));
+        navigate("/cart");
+    }
 
     const changeThumbnail = (index) =>{
         console.log(otherPic[index]);
@@ -67,16 +102,14 @@ export default function SingleProductPage(){
 
     const showRatings = (ratings)=>{
         let a = [];
-        for(let i = 0;i<ratings;++i){
+        for(let i = 0;i<Math.round(ratings);++i){
             a.push("checked")
         }
-        while(a.length != 5){
-            a.push("unchecked")
-        }
+        while(a.length != 5)a.push("unchecked")
         return(
             a.map((status,index)=>{
                 return(
-                status=="checked"?(<span key = {index} className="fa fa-star" style={{color:"yellow",fontSize:"20px"}} ></span>):(<span key = {index} className="fa fa-star" style={{color:"gray",fontSize:"20px"}} ></span>)
+                status=="checked"?(<span key = {index} className="fa fa-star" style={{color:"yellow","fontSize":"20px"}} ></span>):(<span key = {index} className="fa fa-star" style={{color:"gray","fontSize":"20px"}} ></span>)
                 )
             })
         )
@@ -111,9 +144,9 @@ export default function SingleProductPage(){
     const showQuantityButtons = ()=>{
         return(
             <div className="btn-group" style={{width:"35%"}} role="group" aria-label="Default button group">
-                <button type="button" className="btn btn-outline-danger fw-bolder" onClick={e=>setQuantity(quantity + 1)}>+</button>
-                <input type="text"  className="text-center" style = {{width:"50%"}} onChange = {e=>setQuantity(e.target.value)} value = {quantity} name="" id="" />
-                <button type="button" className="btn btn-outline-danger fw-bolder" onClick={e=>setQuantity(quantity - 1)}>-</button>
+                <button type="button" className="btn btn-outline-danger fw-bolder" onClick={()=>setQuantity(Number(qty) + 1)}>+</button>
+                <input type="text"  className="text-center" style = {{width:"50%"}} onChange = {e=>setQuantity(e.target.value)} value = {Number(qty)} name="" id="" />
+                <button type="button" className="btn btn-outline-danger fw-bolder" onClick={()=>setQuantity(Number(qty) - 1)}>-</button>
             </div>
         )
     }
@@ -148,7 +181,7 @@ export default function SingleProductPage(){
                     </div>
 
                     <div className='d-flex flex-row mt-1 mb-2'>
-                        <div>{showRatings(3)}</div>
+                        <div>{showRatings(rating)}</div>
                         <small className='ms-2 text-muted'>(150 Reviews) |</small>
                         <div className='ms-2'>
                             {
@@ -182,10 +215,21 @@ export default function SingleProductPage(){
                         </div>
                         <div className="d-flex align-items-center justify-content-between mt-2">
                             {showQuantityButtons()}
-                            <button className="btn btn-danger ps-5 pe-5 py-2 fw-bolder" style = {{fontSize:"15px"}}>Buy Now</button>
-                            <div className='mb-4 pb-2 mr-5'>
-                                <input type="checkbox" className='heart'/>
-                            </div>
+                            <button onClick={()=>handleBuyNow()} className="btn btn-danger ps-5 pe-5 py-2 fw-bolder" style = {{fontSize:"15px"}}>Buy Now</button>
+                            {
+                                !user.wishlist.find((item)=>item.id == id) && (
+                                    <div className='mb-4 pb-2 mr-5'>
+                                        <input type="checkbox" className='heart' onChange={()=>addtolist()}/>
+                                    </div>
+                                )
+                            }
+                            {
+                                user.wishlist.find((item)=>item.id == Number(id)) && (
+                                    <div className='mb-4 pb-2 mr-5'>
+                                        <input type="checkbox" checked className='heart' onChange={()=>removefromlist()}/>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
 

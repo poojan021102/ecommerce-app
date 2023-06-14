@@ -7,7 +7,9 @@ import WishListPage from "./pages/WishListPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import CartPage from "./pages/CartPage"
 import SingleProductPage from "./pages/SingleProductPage"
-import AllProductsPage from "./pages/allProductsPage"
+import AllProductPage from "./pages/AllProductPage"
+import AllProductsPage from "./pages/AllProductsPage"
+
 function App() {
   return (
     <Routes>
@@ -18,6 +20,7 @@ function App() {
         <Route path='/cart' element={<CartPage />}></Route>
         <Route path='/singleProduct/:id' element={<SingleProductPage />}></Route>
         <Route path="/allProducts" element = {<AllProductsPage/>}/>
+        <Route path='/allProduct/:cat' element={<AllProductPage />}></Route>
         <Route path = "*" element = {<NotFoundPage/>}></Route>
       </Route>
     </Routes>

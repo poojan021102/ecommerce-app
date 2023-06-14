@@ -1,11 +1,11 @@
 import ProductCarousel from "../components/ProductCarousel";
-import ButtonCarousel from "../components/ButtonCarousel"
-import Features from "../components/Features"
-import Poster from "../components/Poster"
+import ButtonCarousel from "../components/ButtonCarousel";
+import Features from "../components/Features";
+import Poster from "../components/Poster";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Carousel from 'react-bootstrap/Carousel';
-import { useEffect,useState } from "react";
-import {checkIfUserAlreadyExists} from "../redux/actions"
+import { useEffect, useState } from "react";
+import {checkIfUserAlreadyExists} from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -33,7 +33,7 @@ export default function HomePage(){
         }
         fetchAllProducts();
     },[]);
-    
+
     useEffect(()=>{
         const fetchCategories = async()=>{
             try{
@@ -70,13 +70,13 @@ export default function HomePage(){
                                     Women's Fashion
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant = 'dark'>
-                                    {
-                                        allCategories.filter(category=>category.toLowerCase().includes("women")).map((item,index)=>{
-                                            return(
-                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
-                                            )
-                                        })
-                                    }
+                                {
+                                    allCategories.filter(category=>category.toLowerCase().includes("women")).map((item,index)=>{
+                                        return(
+                                            <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                        )
+                                    })
+                                }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>
@@ -86,13 +86,13 @@ export default function HomePage(){
                                     Men's Fashion
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant = 'dark'>
-                                    {
-                                        allCategories.filter(category=>category.toLowerCase().includes("men")).map((item,index)=>{
-                                            return(
-                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
-                                            )
-                                        })
-                                    }
+                                {
+                                    allCategories.filter(category=>category.toLowerCase().includes("women")).map((item,index)=>{
+                                        return(
+                                            <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                        )
+                                    })
+                                }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>
@@ -101,34 +101,103 @@ export default function HomePage(){
                                 <Dropdown.Toggle variant="white" id="dropdown-basic">
                                     Electronics
                                 </Dropdown.Toggle>
+                                <Dropdown.Menu variant = 'dark'>
                                 {
-                                        allCategories.map((item,index)=>{
-                                            return(
-                                                <>
-                                                {
-                                                    (item.toLowerCase() == "laptops" || item.toLowerCase() == "laptop" || item.toLowerCase() == "phone" || item.toLowerCase() == "phones" || item.toLowerCase() == "smartphone" || item.toLowerCase() == "smartphones") && 
-                                                    <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
-                                                }
-                                                </>
-                                            )
-                                        })
-                                    }
+                                    allCategories.map((item,index)=>{
+                                        return(
+                                            <>
+                                            {
+                                                (item.toLowerCase() == "laptops" || item.toLowerCase() == "smartphones" || item.toLowerCase() == "automotive") && 
+                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                            }
+                                            </>
+                                        )
+                                    })
+                                }
+                                </Dropdown.Menu>
                             </Dropdown>
                         </li>
-                        <li><a href="#home">Electronics</a></li>
-                        <li><a href="#news">Home & Lifestyle</a></li>
-                        <li><a href="#contact">Medicine</a></li>
-                        <li><a href="#about">Baby's & Toys</a></li>
-                        <li><a href="#about">Groceries</a></li>
-                        <li><a href="#about">Baby's & Toys</a></li>
-                        <li><a href="#about">Health & Beauty</a></li>
-                        <li><a href="#about">Sports</a></li>
+                        <li>
+                            <Dropdown drop = 'end' autoClose = {true} className=''>
+                                <Dropdown.Toggle variant="white" id="dropdown-basic">
+                                    Home & Lifestyle
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu variant = 'dark'>
+                                {
+                                    allCategories.map((item,index)=>{
+                                        return(
+                                            <>
+                                            {
+                                                (item.toLowerCase() == "lighting" || item.toLowerCase() == "furniture" || item.toLowerCase() == "home-decoration") && 
+                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                            }
+                                            </>
+                                        )
+                                    })
+                                }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+                        <li>
+                            <Dropdown drop = 'end' autoClose = {true} className=''>
+                                <Dropdown.Toggle variant="white" id="dropdown-basic">
+                                    Health & Beauty
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu variant = 'dark'>
+                                {
+                                    allCategories.map((item,index)=>{
+                                        return(
+                                            <>
+                                            {
+                                                (item.toLowerCase() == "skincare" || item.toLowerCase() == "fragrances" || item.toLowerCase() == "sunglasses") && 
+                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                            }
+                                            </>
+                                        )
+                                    })
+                                }
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
                         {
                             allCategories.map((item,index)=>{
-                                return (
-                                    <li key = {index}>
-                                        <Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link>
-                                    </li>
+                                    return(
+                                    <>
+                                        {
+                                            (item.toLowerCase() == "tops") && 
+                                            <li key = {index}>
+                                                <Link to = {`/allProduct/${item}`} key = {index}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link>
+                                            </li>
+                                        }
+                                    </>
+                                )
+                            })
+                        }
+                        {
+                            allCategories.map((item,index)=>{
+                                    return(
+                                    <>
+                                        {
+                                            (item.toLowerCase() == "groceries") && 
+                                            <li key = {index}>
+                                                <Link to = {`/allProduct/${item}`} key = {index}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link>
+                                            </li>
+                                        }
+                                    </>
+                                )
+                            })
+                        }
+                        {
+                            allCategories.map((item,index)=>{
+                                    return(
+                                    <>
+                                        {
+                                            (item.toLowerCase() == "motorcycle") && 
+                                            <li key = {index}>
+                                                <Link to = {`/allProduct/${item}`} key = {index}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link>
+                                            </li>
+                                        }
+                                    </>
                                 )
                             })
                         }
@@ -157,7 +226,7 @@ export default function HomePage(){
             {setTitle("Today's","FLash Sales")}
             <ProductCarousel data = {flashSales}/>
             <p className="mt-5" style={{display:"flex",justifyContent:"center"}}>
-                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p></Link>
+                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>View All Products</p></Link>
             </p>
 
             <p className="border-bottom mt-5 mb-5"></p>
@@ -167,7 +236,7 @@ export default function HomePage(){
             {setTitle("This Month","Best Selling Products")}
             <ProductCarousel data = {bestSelling}/>
             <p className="mt-5" style={{display:"flex",justifyContent:"center"}}>
-                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p></Link>
+                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>View All Products</p></Link>
             </p>
             <p className="border-bottom mt-5 mb-5"></p>
 
@@ -179,8 +248,8 @@ export default function HomePage(){
             <p className="border-bottom mt-5 mb-5"></p>
 
             {/* {setTitle("Featured","New Arrival")}
-            <Poster/> */}
-            {/* <p className="border-bottom mt-5 mb-5"></p> */}
+            <Poster/>
+            <p className="border-bottom mt-5 mb-5"></p> */}
             <Features/>
         </div>
     )

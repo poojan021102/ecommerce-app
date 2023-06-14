@@ -10,7 +10,9 @@ export const userSlice = createSlice({
     gender:"",
     image:"",
     lastName:"",
-    token:""
+    token:"",
+    cart: [],
+    wishlist: [],
   },
   reducers: {
     checkIfUserAlreadyExists:(state)=>{
@@ -60,11 +62,35 @@ export const userSlice = createSlice({
         state.lastName="",
         state.token=""
         localStorage.setItem("user",JSON.stringify(state));
-    }
+    },
+    addProductToCart:(state,val)=>{
+        var i,fg=0;
+        for (i = 0; i < state.cart.length; i++) {
+            if (state.cart[i].id === val.payload.id) {
+                state.cart[i].qty+=val.payload.qty;
+                fg=1;
+                break;
+            }
+        }
+        if(fg==0) state.cart.push(val.payload);
+    },
+    changeQtyInCart:(state,obj)=>{
+      state.cart[obj.payload.index].qty=Number(obj.payload.quantity);
+    },
+    removeFromCart:(state,obj)=>{
+      state.cart.splice(obj.payload.index,obj.payload.num);
+    },
+    addProductToWishlist:(state,obj)=>{
+      state.wishlist.push(obj.payload);
+    },
+    removeFromWishlist:(state,obj)=>{
+      console.log(obj);
+      state.wishlist = state.wishlist.filter((item)=> {return item.id !== obj.payload.id});
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { checkIfUserAlreadyExists,loginUser,logoutUser } = userSlice.actions
+export const { checkIfUserAlreadyExists,loginUser,logoutUser,addProductToCart,changeQtyInCart,removeFromCart,addProductToWishlist,removeFromWishlist } = userSlice.actions
 
 export default userSlice.reducer
