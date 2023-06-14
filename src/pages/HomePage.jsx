@@ -1,16 +1,52 @@
-import ProductCarousel from "../components/ProductCarousel"
+import ProductCarousel from "../components/ProductCarousel";
 import ButtonCarousel from "../components/ButtonCarousel"
 import Features from "../components/Features"
 import Poster from "../components/Poster"
 import Dropdown from 'react-bootstrap/Dropdown';
 import Carousel from 'react-bootstrap/Carousel';
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import {checkIfUserAlreadyExists} from "../redux/actions"
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import axios from "axios";
 export default function HomePage(){
+    const [bestSelling,setBestSelling] = useState([]);
+    const [flashSales,setFlashSales] = useState([]);
+    const [explore,setExplore] = useState([]);
     const dispatch = useDispatch();
+    const [allCategories,setAllCategories] = useState([]);
     useEffect(()=>{
         dispatch(checkIfUserAlreadyExists());
+        const fetchAllProducts = async()=>{
+            try{
+                const resp = await axios("https://dummyjson.com/products");
+                console.log(resp.data.products);
+                for(let i = 0;i<Math.min(resp.data.products.length,10);++i){
+                    setBestSelling(pre=>[...pre,resp.data.products[i]]);
+                    setFlashSales(pre=>[...pre,resp.data.products[i]]);
+                    setExplore(pre=>[...pre,resp.data.products[i]]);
+                }
+            }
+            catch(err){
+                console.log("error:",err);
+            }
+        }
+        fetchAllProducts();
+    },[]);
+    
+    useEffect(()=>{
+        const fetchCategories = async()=>{
+            try{
+                const resp = await axios.get("https://dummyjson.com/products/categories");
+                for(let i = 0;i<resp.data.length;++i){
+                    setAllCategories(pre=>[...pre,resp.data[i]]);
+                }
+            }
+            catch(err){
+
+            }
+        }
+        fetchCategories();
     },[]);
     const setTitle = (title,name)=>{
         return(
@@ -34,9 +70,13 @@ export default function HomePage(){
                                     Women's Fashion
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant = 'dark'>
-                                    <Dropdown.Item>English</Dropdown.Item>
-                                    <Dropdown.Item>Hindi</Dropdown.Item>
-                                    <Dropdown.Item>Gujarati</Dropdown.Item>
+                                    {
+                                        allCategories.filter(category=>category.toLowerCase().includes("women")).map((item,index)=>{
+                                            return(
+                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                            )
+                                        })
+                                    }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>
@@ -46,22 +86,33 @@ export default function HomePage(){
                                     Men's Fashion
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant = 'dark'>
-                                    <Dropdown.Item>English</Dropdown.Item>
-                                    <Dropdown.Item>Hindi</Dropdown.Item>
-                                    <Dropdown.Item>Gujarati</Dropdown.Item>
+                                    {
+                                        allCategories.filter(category=>category.toLowerCase().includes("men")).map((item,index)=>{
+                                            return(
+                                                <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                            )
+                                        })
+                                    }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>
                         <li>
                             <Dropdown drop = 'end' autoClose = {true} className=''>
                                 <Dropdown.Toggle variant="white" id="dropdown-basic">
-                                    kids's Fashion
+                                    Electronics
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu variant = 'dark'>
-                                    <Dropdown.Item>English</Dropdown.Item>
-                                    <Dropdown.Item>Hindi</Dropdown.Item>
-                                    <Dropdown.Item>Gujarati</Dropdown.Item>
-                                </Dropdown.Menu>
+                                {
+                                        allCategories.map((item,index)=>{
+                                            return(
+                                                <>
+                                                {
+                                                    (item.toLowerCase() == "laptops" || item.toLowerCase() == "laptop" || item.toLowerCase() == "phone" || item.toLowerCase() == "phones" || item.toLowerCase() == "smartphone" || item.toLowerCase() == "smartphones") && 
+                                                    <Link to = {`/allProduct/${item}`} key = {index}><Dropdown.Item ><Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link></Dropdown.Item></Link>
+                                                }
+                                                </>
+                                            )
+                                        })
+                                    }
                             </Dropdown>
                         </li>
                         <li><a href="#home">Electronics</a></li>
@@ -72,55 +123,41 @@ export default function HomePage(){
                         <li><a href="#about">Baby's & Toys</a></li>
                         <li><a href="#about">Health & Beauty</a></li>
                         <li><a href="#about">Sports</a></li>
+                        {
+                            allCategories.map((item,index)=>{
+                                return (
+                                    <li key = {index}>
+                                        <Link to = {`/allProduct/${item}`}>{item.charAt(0).toUpperCase() + item.slice(1)}</Link>
+                                    </li>
+                                )
+                            })
+                        }
                     </ul>
                 </div>
                 <div className='m-5'>
                 <Carousel className='me-5 px-5'>
-                    <Carousel.Item>
-                        <img
-                        className="d-block w-100"
-                        src="https://st.adda247.com/https://wpassets.adda247.com/wp-content/uploads/multisite/sites/5/2021/09/14073840/ms-dhoni-1625654692.jpg"
-                        alt="First slide"
-                        />
-                        <Carousel.Caption>
-                        <h3>First slide label</h3>
-                        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                        className="d-block w-100"
-                        src="https://st.adda247.com/https://wpassets.adda247.com/wp-content/uploads/multisite/sites/5/2021/09/14073840/ms-dhoni-1625654692.jpg"
-                        alt="Second slide"
-                        />
-                        <Carousel.Caption>
-                        <h3>Second slide label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                        className="d-block w-100"
-                        src="https://st.adda247.com/https://wpassets.adda247.com/wp-content/uploads/multisite/sites/5/2021/09/14073840/ms-dhoni-1625654692.jpg"
-                        alt="Third slide"
-                        />
-
-                        <Carousel.Caption>
-                        <h3>Third slide label</h3>
-                        <p>
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                        </p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
+                    {
+                        bestSelling.map((item,index)=>{
+                            return (
+                                <Carousel.Item style={{width:"100%"}}>
+                                    <img src={item.thumbnail} alt={item.title} style={{width:"900px",height:"500px"}}/>
+                                    <Link key = {index} to = {`/singleProduct/${item.id}`}>
+                                    <Carousel.Caption>
+                                        {item.title}
+                                    </Carousel.Caption>
+                                    </Link>
+                                </Carousel.Item>
+                            )
+                        })
+                    }
                 </Carousel>
                 </div>
             </div>
             
             {setTitle("Today's","FLash Sales")}
-            <ProductCarousel category = "Today's Sale"/>
-
+            <ProductCarousel data = {flashSales}/>
             <p className="mt-5" style={{display:"flex",justifyContent:"center"}}>
-                <p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p>
+                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p></Link>
             </p>
 
             <p className="border-bottom mt-5 mb-5"></p>
@@ -128,22 +165,22 @@ export default function HomePage(){
             <ButtonCarousel/>
             <p className="border-bottom mt-5 mb-5"></p>
             {setTitle("This Month","Best Selling Products")}
-            <ProductCarousel category = "Best Selling Products"/>
+            <ProductCarousel data = {bestSelling}/>
             <p className="mt-5" style={{display:"flex",justifyContent:"center"}}>
-                <p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p>
+                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p></Link>
             </p>
             <p className="border-bottom mt-5 mb-5"></p>
 
             {setTitle("Our Products","Explore Our Products")}
-            <ProductCarousel category = "Our Products"/>
+            <ProductCarousel data = {explore}/>
             <p className="mt-5" style={{display:"flex",justifyContent:"center"}}>
-                <p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p>
+                <Link to = "/allProducts"><p className="btn btn-danger ps-5 pe-5" style={{textAlign:"center"}}>Vew All Products</p></Link>
             </p>
             <p className="border-bottom mt-5 mb-5"></p>
 
-            {setTitle("Featured","New Arrival")}
-            <Poster/>
-            <p className="border-bottom mt-5 mb-5"></p>
+            {/* {setTitle("Featured","New Arrival")}
+            <Poster/> */}
+            {/* <p className="border-bottom mt-5 mb-5"></p> */}
             <Features/>
         </div>
     )

@@ -16,7 +16,7 @@ export default function Product({imageLink,title,ratings,price}){
     return(
         <>
             <div className="card" style={{width: "270px"}}>
-            <img src={imageLink} className="card-img-top" alt="..."/>
+            <img src={imageLink} style={{height:"170px"}} className="card-img-top" alt="..."/>
             <div className="card-body">
                 <p className="card-text">{title}</p>
                 <p className = "card-text text-danger">Rs {price}</p>
