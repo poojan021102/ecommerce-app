@@ -19,7 +19,7 @@ export default function SingleProductPage(){
     const [rating,setRating] = useState('');
     const [thumbnail,setThumbnail] = useState('');
     const [otherPic,setOtherPic] = useState([]);
-
+    const [products,setProducts] = useState([]);
     let a = [{imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
     {imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
     {imageLink:"https://th.bing.com/th/id/R.cc3b1567038ac9c1461b9937b15739df?rik=L3Xlg%2fAJRkcq4g&riu=http%3a%2f%2fwww.hdwallpaperspulse.com%2fwp-content%2fuploads%2f2019%2f02%2f11%2fbeautiful-nature-Best-Scenery-Wallpapers.jpg&ehk=acp4ccuFepzaZeQ2NZpIUdIF%2fjGi3Iur94JhC5BR8pM%3d&risl=&pid=ImgRaw&r=0",title:"Product Title",price:"100"},
@@ -37,7 +37,20 @@ export default function SingleProductPage(){
             if(response.data.stock <= 0) setStock(false);
         });
     },[id]);
-
+    useEffect(()=>{
+        const fetchAllProducts = async()=>{
+            try{
+                const resp =await axios.get("https://dummyjson.com/products");
+                for(let i = 0;i<Math.min(5,resp.data.products.length);++i){
+                    setProducts(pre=>[...pre,resp.data.products[i]]);
+                }
+            }
+            catch(err){
+                console.log("Error",err)
+            }
+        }
+        fetchAllProducts();
+    },[]);
     const addtolist = () => {
         const obj = {
             id: Number(id),
@@ -90,7 +103,7 @@ export default function SingleProductPage(){
                         a.map((item,index)=>{
                             return(
                                     <div key = {index} className="col d-flex justify-content-center align-items-center mt-2 mb-2">
-                                        <Product imageLink={item.imageLink} title = {item.title} price = {item.price} ratings={3}/>
+                                        <Product id = {item.id} imageLink={item.thumbnail} title = {item.title} price = {item.price} ratings={Math.round(item.rating)}/>
                                     </div>
                                 )
                             })
@@ -154,7 +167,7 @@ export default function SingleProductPage(){
         <div className="d-flex flex-column mb-5">
             <div className='mt-3 mx-5 px-5'>
                 <Breadcrumb>
-                    <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                    <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item active>Gaming</Breadcrumb.Item>
                 </Breadcrumb>
             </div>
@@ -260,7 +273,7 @@ export default function SingleProductPage(){
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 {setTitle("Related Items")}
             </div>
-            {showProducts(a)}
+            {showProducts(products)}
         </div>
     );
 }

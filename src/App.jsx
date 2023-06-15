@@ -18,7 +18,7 @@ function App() {
         <Route index element={<HomePage />}></Route>
         <Route path='/WishList' element={<WishListPage />}></Route>
         <Route path='/cart' element={<CartPage />}></Route>
-        <Route path='/singleProduct/:id' element={<SingleProductPage />}></Route>
+        <Route path='/singleProduct/:id' element={<SingleProductPage />}/>
         <Route path="/allProducts" element = {<AllProductsPage/>}/>
         <Route path='/allProduct/:cat' element={<AllProductPage />}></Route>
         <Route path = "*" element = {<NotFoundPage/>}></Route>

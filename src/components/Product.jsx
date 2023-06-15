@@ -1,6 +1,7 @@
 import { useDispatch,useSelector } from 'react-redux';
 import { addProductToCart, addProductToWishlist, removeFromWishlist } from '../redux/actions';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Product({imageLink,title,ratings,price,id}){
     const dispatch = useDispatch();
@@ -52,29 +53,29 @@ export default function Product({imageLink,title,ratings,price,id}){
 
     return(
         <>
-            <div className="card" style={{width: "270px"}}>
-            <img onClick={()=>navigate(`/singleProduct/${id}`)} style={{height:"170px"}} src={imageLink} className="card-img-top" alt="..."/>
-            <div className="card-body">
-                    <div onClick={()=>navigate(`/singleProduct/${id}`)}>
-                        <p className="card-text">{title}</p>
-                        <p className = "card-text text-danger">Rs {price}</p>
-                    </div>
-                    <div className='d-flex flex-row justify-content-between align-items-center'>
-                        {ratings && <p className="card-text">{showRatings()}</p>}
-                        {
-                            !user.wishlist.find((item)=>item.id == id) && (
-                                <input type="checkbox" className='heart mb-5 mr-4' onChange={()=>addtolist()}/>
-                            )
-                        }
-                        {
-                            user.wishlist.find((item)=>item.id == Number(id)) && (
-                                <input type="checkbox" checked className='heart mb-5 mr-4' onChange={()=>removefromlist()}/>
-                            )
-                        }
-                    </div>
-                <p onClick={AddProToCart} className="text-center btn btn-outline-secondary" style={{fontSize:"10px",width:'100%'}}>Add To Cart</p>
-            </div>
-            </div>
+            <Link to = {`/singleProduct/${id}`} className="card" style={{width: "270px"}}>
+                <img onClick={()=>navigate(`/singleProduct/${id}`)} style={{height:"170px"}} src={imageLink} className="card-img-top" alt="..."/>
+                <div className="card-body">
+                        <div onClick={()=>navigate(`/singleProduct/${id}`)}>
+                            <p className="card-text">{title}</p>
+                            <p className = "card-text text-danger">Rs {price}</p>
+                        </div>
+                        <div className='d-flex flex-row justify-content-between align-items-center'>
+                            {ratings && <p className="card-text">{showRatings()}</p>}
+                            {
+                                !user.wishlist.find((item)=>item.id == id) && (
+                                    <input type="checkbox" className='heart mb-5 mr-4' onChange={()=>addtolist()}/>
+                                )
+                            }
+                            {
+                                user.wishlist.find((item)=>item.id == Number(id)) && (
+                                    <input type="checkbox" checked className='heart mb-5 mr-4' onChange={()=>removefromlist()}/>
+                                )
+                            }
+                        </div>
+                    <p onClick={AddProToCart} className="text-center btn btn-outline-secondary" style={{fontSize:"10px",width:'100%'}}>Add To Cart</p>
+                </div>
+            </Link>
         </>
     )
 }
