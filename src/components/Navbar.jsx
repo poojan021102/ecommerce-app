@@ -10,6 +10,7 @@ export default function Navbar(){
         e.preventDefault();
         dispatch(logoutUser()); 
     }
+
     return (
         <div className="container-fluid text-center border-bottom" style={{height:"60px"}}>
             <div className="row h-100">

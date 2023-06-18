@@ -1,4 +1,4 @@
-import { Link,useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import loginPageImage from '../assets/loginPageImage.png'
 import { Spinner } from 'react-bootstrap';
 import {useEffect, useState} from "react"
@@ -19,7 +19,7 @@ export default function LoginPage(){
             resp=>{
                 if(resp.status === 200){
                     dispatch(loginUser(resp.data));
-                    navigate("/");
+                    navigate(-1);
                 }
                 else{
                     alert("Invalid UserName or Password");  
