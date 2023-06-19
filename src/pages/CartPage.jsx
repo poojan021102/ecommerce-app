@@ -4,7 +4,7 @@ import { changeQtyInCart, removeFromCart } from '../redux/actions';
 import { Link } from 'react-router-dom';
 
 export default function CartPage(){
-
+    let sum = 0;
     const dispatch = useDispatch();
     const user = useSelector(state=>state.user);
 
@@ -55,7 +55,9 @@ export default function CartPage(){
             </div>
             <div className='bg-white mx-5 my-3 shadow'>
                 {
-                    user.cart.length > 0 && user.cart.map((item,index)=>(
+                    user.cart.length > 0 && user.cart.map((item,index)=>{
+                        sum+=item.price*item.qty;
+                        return(
                         <div className='my-3 mx-5 px-5 d-flex align-items-center justify-content-between text-dark'>
                             <div>
                                 <img className='Imgsz' src={item.imageLink} alt="" />
@@ -76,7 +78,7 @@ export default function CartPage(){
                                 </svg>
                             </button>
                         </div>
-                    ))
+                    )})
                 }
             </div>
             <div className='mx-5 my-3 d-flex flex-row justify-content-between'>
@@ -101,9 +103,9 @@ export default function CartPage(){
                     </div>
                     <div class="form-group my-2">
                         <label className='mr-4 pl-1'>Total:</label>
-                        <input type="text" class="form-control border border-dark bg-white ml-5" disabled/>
+                        <input value={sum} type="text" class="form-control border border-dark bg-white ml-5" disabled/>
                     </div>
-                    <button type="submit" class="btn btn-danger mt-4">Proceed to Checkout</button>
+                    <Link to="/checkout" class="btn btn-danger mt-4">Proceed to Checkout</Link>
                 </form>
             </div>
         </div>
