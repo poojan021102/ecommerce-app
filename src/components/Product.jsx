@@ -53,11 +53,11 @@ export default function Product({imageLink,title,ratings,price,id}){
 
     return(
         <>
-            <Link to = {`/singleProduct/${id}`} className="card" style={{width: "270px"}}>
-                <img onClick={()=>navigate(`/singleProduct/${id}`)} style={{height:"170px"}} src={imageLink} className="card-img-top" alt="..."/>
+            <div className="card" style={{width: "270px",paddingBottom:"10px"}}>
+                <img onClick={()=>navigate(`/singleProduct/${id}`)} style={{height:"170px",width:"100%"}} src={imageLink} className="card-img-top" alt="..."/>
                 <div className="card-body">
                         <div onClick={()=>navigate(`/singleProduct/${id}`)}>
-                            <p className="card-text">{title}</p>
+                            <Link to = {`/singleProduct/${id}`}><p className="card-text">{title}</p></Link>
                             <p className = "card-text text-danger">Rs {price}</p>
                         </div>
                         <div className='d-flex flex-row justify-content-between align-items-center'>
@@ -75,7 +75,7 @@ export default function Product({imageLink,title,ratings,price,id}){
                         </div>
                     <p onClick={AddProToCart} className="text-center btn btn-outline-secondary" style={{fontSize:"10px",width:'100%'}}>Add To Cart</p>
                 </div>
-            </Link>
+            </div>
         </>
     )
 }
