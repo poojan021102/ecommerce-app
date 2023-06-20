@@ -1,13 +1,18 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-export default function CheckoutForm() {
+export default function CheckoutForm({onChange}) {
   const stripe = useStripe();
   const elements = useElements();
   
-
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [redirect,setRedirect] = useState(false);
+
+  if(redirect){
+    onChange(false);
+    return <Navigate to={'/cart'}/>
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,17 +43,23 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" />
-      <div className="m-2" style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-        <button className="btn btn-primary mt-3" disabled={isProcessing || !stripe || !elements} id="submit">
-          <span id="button-text">
-            {isProcessing ? "Processing ... " : "Pay now"}
-          </span>
-        </button>
-      </div>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+    <>
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement id="payment-element" />
+        <div className="m-2" style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <button className="btn btn-primary mt-3" disabled={isProcessing || !stripe || !elements} id="submit">
+            <span id="button-text">
+              {isProcessing ? "Processing ... " : "Pay now"}
+            </span>
+          </button>
+          <div>
+              <button className="btn btn-primary mt-3 ml-3" onClick={()=>setRedirect(true)}>Cancel</button>
+          </div>
+        </div>
+        {/* Show any error or success messages */}
+        {message && <div id="payment-message">{message}</div>}
+      </form>
+    </>
+    
   );
 }

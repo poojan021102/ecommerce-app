@@ -1,12 +1,21 @@
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeQtyInCart, removeFromCart } from '../redux/actions';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Payment from './Payment';
 
 export default function CartPage(){
     let sum = 0;
     const dispatch = useDispatch();
     const user = useSelector(state=>state.user);
+    const [redirect,setRedirect] = useState(false);
+
+    if(redirect){
+        return (
+            <Payment onChange={setRedirect}/>
+        );
+    }
 
     const handleQtyChange = async (ev,index) => {
         let quantity = await ev.target.value;
@@ -105,7 +114,7 @@ export default function CartPage(){
                         <label className='mr-4 pl-1'>Total:</label>
                         <input value={sum} type="text" class="form-control border border-dark bg-white ml-5" disabled/>
                     </div>
-                    <Link to="/checkout" class="btn btn-danger mt-4">Proceed to Checkout</Link>
+                    <button onClick={()=>setRedirect(true)} class="btn btn-danger mt-4">Proceed to Checkout</button>
                 </form>
             </div>
         </div>
