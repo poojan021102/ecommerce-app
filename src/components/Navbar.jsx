@@ -18,7 +18,7 @@ export default function Navbar(){
     },[user.cart]);
 
     return (
-        <div className="container-fluid text-center border-bottom" style={{height:"60px"}}>
+        <div className="container-fluid text-center border-bottom" style={{height:"60px",position:"sticky",top:0, zIndex:"100",backgroundColor:"white"}}>
             <div className="row h-100">
                 <div className="col-md-4 col-lg-4 col-xl-4 col-xxl-4 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">
                     <Link to = "/">Exclusive</Link>
